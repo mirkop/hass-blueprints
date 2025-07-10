@@ -22,7 +22,7 @@ fields:
     default: 15
     selector:
       number:
-        min: 3
+        min: 0
         max: 180
         unit_of_measurement: seconds
   repeat_count:
@@ -39,7 +39,7 @@ fields:
     default: 5
     selector:
       number:
-        min: 3
+        min: 0
         max: 30
         unit_of_measurement: seconds
   light_delay:
