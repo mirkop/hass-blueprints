@@ -39,10 +39,12 @@ name: Start Luau Lighting
 icon: mdi:party-popper
 tap_action:
   action: call-service
-  service: event.fire
-  data:
-    event_type: luau_lighting_start
+  service: automation.trigger
+  target:
+    entity_id: automation.luau_lighting
 ```
+
+Replace `automation.YOUR_LUAU_AUTOMATION_ENTITY_ID` with the actual entity ID of your Luau automation (e.g., `automation.luau_lighting`).
 
 ### Example Stop Button YAML (Manual Card)
 
