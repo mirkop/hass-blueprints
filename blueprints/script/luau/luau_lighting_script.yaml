@@ -6,7 +6,7 @@ alias: Luau Themed Lighting Script
 mode: single
 description: >
   Advanced script to create a Luau party atmosphere by slowly cycling multiple RGB lights through tropical colors.
-  Each light gets a different color from the palette at each step.
+  Each light gets a random color from the palette at each step.
 fields:
   lights:
     name: RGB Lights
@@ -43,27 +43,48 @@ fields:
         max: 30
         unit_of_measurement: seconds
 sequence:
-  - variables:
-      colors:
-        - [255, 94, 77]    # Coral
-        - [255, 195, 0]    # Yellow
-        - [0, 255, 164]    # Aqua
-        - [0, 122, 255]    # Blue
-        - [255, 0, 191]    # Magenta
-        - [255, 102, 255]  # Orchid
-        - [0, 255, 255]    # Teal
-      num_lights: "{{ lights | length }}"
-  - repeat:
-      count: "{{ repeat_count }}"
-      sequence:
-        - repeat:
-            count: "{{ num_lights }}"
-            sequence:
-              - service: light.turn_on
-                data:
-                  entity_id: "{{ lights[repeat.index] }}"
-                  rgb_color: "{{ colors[(repeat.parent.index + repeat.index) % (colors|length)] }}"
-                  brightness: 200
-                  transition: "{{ transition_time }}"
-        - delay:
-            seconds: "{{ cycle_delay }}"
+  - choose:
+      - conditions: "{{ lights | length == 0 }}"
+        sequence:
+          - stop: "No lights selected. Script will not run."
+    default:
+      - variables:
+          colors:
+            - [255, 94, 77]    # Coral
+            - [255, 195, 0]    # Yellow
+            - [0, 255, 164]    # Aqua
+            - [0, 122, 255]    # Blue
+            - [255, 0, 191]    # Magenta
+            - [255, 102, 255]  # Orchid
+            - [0, 255, 255]    # Teal
+            - [255, 153, 51]   # Mango Orange
+            - [255, 255, 102]  # Pineapple Yellow
+            - [102, 255, 178]  # Mint Green
+            - [255, 51, 153]   # Hibiscus Pink
+            - [204, 255, 51]   # Lime Green
+            - [255, 128, 0]    # Sunset Orange
+            - [153, 51, 255]   # Orchid Purple
+            - [255, 204, 229]  # Plumeria Pink
+          num_lights: "{{ lights | length }}"
+      - repeat:
+          count: "{{ repeat_count }}"
+          sequence:
+            - repeat:
+                count: "{{ num_lights }}"
+                sequence:
+                  - choose:
+                      - conditions: "{{ lights[repeat.index] | string != '' }}"
+                        sequence:
+                          - service: light.turn_on
+                            data:
+                              entity_id: "{{ lights[repeat.index] | string }}"
+                              rgb_color: >
+                                {% set current = state_attr(lights[repeat.index], 'rgb_color') %}
+                                {% set available = colors | reject('equalto', current) | list %}
+                                {{ (available | random) if available else (colors | random) }}
+                              brightness: 255
+                              transition: "{{ transition_time }}"
+                  - delay:
+                      seconds: "1"
+            - delay:
+                seconds: "{{ cycle_delay }}"
