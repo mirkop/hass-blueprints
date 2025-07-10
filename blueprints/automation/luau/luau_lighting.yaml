@@ -54,24 +54,18 @@ action:
         - [255, 0, 191]    # Magenta
         - [255, 102, 255]  # Orchid
         - [0, 255, 255]    # Teal
-      light_entities: >
-        {{ expand(target_lights.entity_id) | map(attribute='entity_id') | list }}
   - repeat:
       count: !input repeat_count
       sequence:
-        - variables:
-            color_map: >
-              {{ dict((light_entities[i], colors[(repeat.index + i) % colors|length]) for i in range(light_entities|length)) }}
-        - repeat:
-            count: "{{ light_entities | length }}"
-            sequence:
-              - service: light.turn_on
-                target:
-                  entity_id: "{{ light_entities[repeat.index] }}"
-                data:
-                  rgb_color: "{{ color_map[light_entities[repeat.index]] }}"
-                  brightness: 200
-                  transition: !input transition_time
+        - choose:
+            - conditions: []
+              sequence:
+                - service: light.turn_on
+                  target: !input target_lights
+                  data:
+                    rgb_color: "{{ colors[(repeat.index + loop.index0) % (colors|length)] }}"
+                    brightness: 200
+                    transition: !input transition_time
         - delay:
             seconds: !input cycle_delay
 mode: single

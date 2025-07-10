@@ -1,0 +1,69 @@
+# Luau Themed Lighting Script (Advanced)
+# This script cycles each selected RGB light through a unique color from the Luau palette.
+# Usage: Call this script with a list of light entities.
+
+alias: Luau Themed Lighting Script
+mode: single
+description: >
+  Advanced script to create a Luau party atmosphere by slowly cycling multiple RGB lights through tropical colors.
+  Each light gets a different color from the palette at each step.
+fields:
+  lights:
+    name: RGB Lights
+    description: List of RGB light entities to use for the Luau effect.
+    required: true
+    selector:
+      entity:
+        domain: light
+        multiple: true
+  cycle_delay:
+    name: Color Change Delay
+    description: Time (in seconds) between color changes.
+    default: 15
+    selector:
+      number:
+        min: 3
+        max: 180
+        unit_of_measurement: seconds
+  repeat_count:
+    name: Number of Color Cycles
+    description: How many times to cycle through the color palette.
+    default: 30
+    selector:
+      number:
+        min: 1
+        max: 100
+  transition_time:
+    name: Color Transition Time
+    description: Time (in seconds) for each color transition.
+    default: 5
+    selector:
+      number:
+        min: 3
+        max: 30
+        unit_of_measurement: seconds
+sequence:
+  - variables:
+      colors:
+        - [255, 94, 77]    # Coral
+        - [255, 195, 0]    # Yellow
+        - [0, 255, 164]    # Aqua
+        - [0, 122, 255]    # Blue
+        - [255, 0, 191]    # Magenta
+        - [255, 102, 255]  # Orchid
+        - [0, 255, 255]    # Teal
+      num_lights: "{{ lights | length }}"
+  - repeat:
+      count: "{{ repeat_count }}"
+      sequence:
+        - repeat:
+            count: "{{ num_lights }}"
+            sequence:
+              - service: light.turn_on
+                data:
+                  entity_id: "{{ lights[repeat.index] }}"
+                  rgb_color: "{{ colors[(repeat.parent.index + repeat.index) % (colors|length)] }}"
+                  brightness: 200
+                  transition: "{{ transition_time }}"
+        - delay:
+            seconds: "{{ cycle_delay }}"
