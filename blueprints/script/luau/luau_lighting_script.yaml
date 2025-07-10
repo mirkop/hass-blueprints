@@ -16,6 +16,15 @@ fields:
       entity:
         domain: light
         multiple: true
+  runtime_minutes:
+    name: Total Runtime (Minutes)
+    description: How many minutes the effect should run for.
+    default: 15
+    selector:
+      number:
+        min: 1
+        max: 240
+        unit_of_measurement: minutes
   cycle_delay:
     name: Color Change Delay
     description: Time (in seconds) between color changes.
@@ -43,14 +52,6 @@ fields:
         min: 0
         max: 30
         unit_of_measurement: seconds
-  repeat_count:
-    name: Number of Color Cycles
-    description: How many times to cycle through the color palette.
-    default: 30
-    selector:
-      number:
-        min: 1
-        max: 100
 sequence:
   - choose:
       - conditions: "{{ lights | length == 0 }}"
@@ -75,6 +76,12 @@ sequence:
             - [153, 51, 255]   # Orchid Purple
             - [255, 204, 229]  # Plumeria Pink
           num_lights: "{{ lights | length }}"
+          total_runtime_seconds: "{{ runtime_minutes * 60 }}"
+          time_per_cycle: "{{ cycle_delay + (light_delay * num_lights) }}"
+          repeat_count: >
+            {% set t = cycle_delay + (light_delay * num_lights) %}
+            {% set total = runtime_minutes * 60 %}
+            {{ (total // t) if t > 0 else 1 }}
       - repeat:
           count: "{{ repeat_count }}"
           sequence:

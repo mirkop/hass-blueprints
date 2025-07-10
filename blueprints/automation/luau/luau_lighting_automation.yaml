@@ -40,14 +40,15 @@ blueprint:
           min: 0
           max: 10
           unit_of_measurement: seconds
-    repeat_count:
-      name: Number of Color Cycles
-      description: How many times to cycle through the color palette.
-      default: 30
+    runtime_minutes:
+      name: Total Runtime (Minutes)
+      description: How many minutes the effect should run for.
+      default: 15
       selector:
         number:
           min: 1
-          max: 100
+          max: 240
+          unit_of_measurement: minutes
     trigger_event:
       name: Trigger Event
       description: Event type to trigger the Luau lighting (e.g., luau_lighting_start). Leave blank to use manual or time triggers.
@@ -65,9 +66,9 @@ action:
     data:
       lights: !input target_lights
       cycle_delay: !input cycle_delay
-      repeat_count: !input repeat_count
       transition_time: !input transition_time
       light_delay: !input light_delay
+      runtime_minutes: !input runtime_minutes
 mode: single
 
 # Usage:

@@ -8,7 +8,7 @@ This Home Assistant blueprint creates a Luau party atmosphere by cycling multipl
 - Advanced color cycling: each light gets a random color from the palette, always different from its current color
 - Customizable Luau-inspired color palette (edit in the blueprint)
 - Adjustable delay between lights and between cycles
-- Set the number of cycles (repeat count)
+- Set the total runtime in minutes (automatically calculates cycles)
 - Adjustable transition time for smooth color changes
 - Robust error handling (e.g., empty light list or palette)
 - Easy to start and stop from dashboard buttons or automations
@@ -54,14 +54,14 @@ tap_action:
   action: call-service
   service: script.turn_off
   target:
-    entity_id: script.luau_lighting_script
+    entity_id: script.luau_themed_lighting_script
 ```
 
 ## Customization
 
 - **Color Palette:** Edit the palette in the blueprint YAML to match your preferred Luau colors.
 - **Delays & Transition:** Adjust the delay between lights, delay between cycles, and transition time for different effects.
-- **Repeat Count:** Set how many times the palette cycles (or use a high number for continuous effect).
+- **Total Runtime:** Set how many minutes the effect should run (cycles are calculated automatically).
 
 ## Usage Notes
 

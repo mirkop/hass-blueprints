@@ -5,7 +5,7 @@ This advanced Home Assistant script cycles each selected RGB light through a uni
 ## Features
 
 - Each light gets a different color at each step
-- Customizable delay, transition, and repeat count
+- Customizable delay, transition, and total runtime (in minutes)
 - Works with any number of RGB lights
 
 ## Usage
@@ -13,7 +13,7 @@ This advanced Home Assistant script cycles each selected RGB light through a uni
 1. Import the script YAML from `luau_lighting_script.yaml` into Home Assistant as a script.
 2. Call the script and provide:
    - A list of RGB light entities
-   - (Optional) Delay between color changes, transition time, and repeat count
+   - (Optional) Delay between color changes, transition time, delay between lights, and total runtime in minutes
 
 ## Example Service Call
 
@@ -24,8 +24,9 @@ data:
     - light.living_room
     - light.kitchen
   cycle_delay: 15
-  repeat_count: 30
+  light_delay: 1
   transition_time: 5
+  runtime_minutes: 20
 ```
 
 ## Dashboard Button to Stop the Script
@@ -47,4 +48,5 @@ tap_action:
 ## Notes
 
 - The color palette can be customized in the script variables.
+- The script will run for approximately the total runtime specified, based on your timing settings.
 - This script is not a blueprint, so it must be imported as a script and called directly.
