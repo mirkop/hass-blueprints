@@ -52,6 +52,27 @@ fields:
         min: 1
         max: 480
         unit_of_measurement: minutes
+  colors:
+    name: Color Palette
+    description: List of RGB colors to use for the Luau effect. Each color is a list of three numbers (R,G,B).
+    default:
+      - [255, 94, 77]    # Coral
+      - [255, 195, 0]    # Yellow
+      - [0, 255, 164]    # Aqua
+      - [0, 122, 255]    # Blue
+      - [255, 0, 191]    # Magenta
+      - [255, 102, 255]  # Orchid
+      - [0, 255, 255]    # Teal
+      - [255, 153, 51]   # Mango Orange
+      - [255, 255, 102]  # Pineapple Yellow
+      - [102, 255, 178]  # Mint Green
+      - [255, 51, 153]   # Hibiscus Pink
+      - [204, 255, 51]   # Lime Green
+      - [255, 128, 0]    # Sunset Orange
+      - [153, 51, 255]   # Orchid Purple
+      - [255, 204, 229]  # Plumeria Pink
+    selector:
+      object:
 sequence:
   - choose:
       - conditions: "{{ lights | length == 0 }}"
@@ -59,22 +80,7 @@ sequence:
           - stop: "No lights selected. Script will not run."
     default:
       - variables:
-          colors:
-            - [255, 94, 77]    # Coral
-            - [255, 195, 0]    # Yellow
-            - [0, 255, 164]    # Aqua
-            - [0, 122, 255]    # Blue
-            - [255, 0, 191]    # Magenta
-            - [255, 102, 255]  # Orchid
-            - [0, 255, 255]    # Teal
-            - [255, 153, 51]   # Mango Orange
-            - [255, 255, 102]  # Pineapple Yellow
-            - [102, 255, 178]  # Mint Green
-            - [255, 51, 153]   # Hibiscus Pink
-            - [204, 255, 51]   # Lime Green
-            - [255, 128, 0]    # Sunset Orange
-            - [153, 51, 255]   # Orchid Purple
-            - [255, 204, 229]  # Plumeria Pink
+          colors: "{{ colors }}"
           num_lights: "{{ lights | length }}"
           repeat_count: >
             {% set total_runtime_seconds = runtime_minutes * 60 %}
@@ -84,22 +90,26 @@ sequence:
       - repeat:
           count: "{{ repeat_count }}"
           sequence:
+            - variables:
+                light_idx: 0
             - repeat:
                 count: "{{ num_lights }}"
                 sequence:
                   - choose:
-                      - conditions: "{{ lights[repeat.index] | string != '' }}"
+                      - conditions: "{{ lights[light_idx] | string != '' }}"
                         sequence:
                           - service: light.turn_on
                             data:
-                              entity_id: "{{ lights[repeat.index] | string }}"
+                              entity_id: "{{ lights[light_idx] | string }}"
                               rgb_color: >
-                                {% set current = state_attr(lights[repeat.index], 'rgb_color') %}
+                                {% set current = state_attr(lights[light_idx], 'rgb_color') %}
                                 {% set available = colors | reject('equalto', current) | list %}
                                 {{ (available | random) if available else (colors | random) }}
                               brightness: 255
                               transition: "{{ transition_time }}"
                   - delay:
                       seconds: "{{ light_delay }}"
+                  - variables:
+                      light_idx: "{{ light_idx + 1 }}"
             - delay:
                 seconds: "{{ cycle_delay }}"

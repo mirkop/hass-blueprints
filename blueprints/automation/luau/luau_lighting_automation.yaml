@@ -22,15 +22,6 @@ blueprint:
           min: 0
           max: 180
           unit_of_measurement: seconds
-    transition_time:
-      name: Color Transition Time
-      description: Time (in seconds) for each color transition.
-      default: 5
-      selector:
-        number:
-          min: 0
-          max: 30
-          unit_of_measurement: seconds
     light_delay:
       name: Delay Between Lights
       description: Time (in seconds) to wait between changing each light.
@@ -39,6 +30,15 @@ blueprint:
         number:
           min: 0
           max: 10
+          unit_of_measurement: seconds
+    transition_time:
+      name: Color Transition Time
+      description: Time (in seconds) for each color transition.
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 30
           unit_of_measurement: seconds
     runtime_minutes:
       name: Total Runtime (Minutes)
@@ -69,6 +69,22 @@ action:
       transition_time: !input transition_time
       light_delay: !input light_delay
       runtime_minutes: !input runtime_minutes
+      colors:
+        - [255, 94, 77]    # Coral
+        - [255, 195, 0]    # Yellow
+        - [0, 255, 164]    # Aqua
+        - [0, 122, 255]    # Blue
+        - [255, 0, 191]    # Magenta
+        - [255, 102, 255]  # Orchid
+        - [0, 255, 255]    # Teal
+        - [255, 153, 51]   # Mango Orange
+        - [255, 255, 102]  # Pineapple Yellow
+        - [102, 255, 178]  # Mint Green
+        - [255, 51, 153]   # Hibiscus Pink
+        - [204, 255, 51]   # Lime Green
+        - [255, 128, 0]    # Sunset Orange
+        - [153, 51, 255]   # Orchid Purple
+        - [255, 204, 229]  # Plumeria Pink
 mode: single
 
 # Usage:
