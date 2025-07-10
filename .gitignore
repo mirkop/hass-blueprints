@@ -1,0 +1,13 @@
+# Home Assistant Blueprint Project .gitignore
+*.pyc
+__pycache__/
+.env
+.DS_Store
+.vscode/
+.idea/
+*.log
+# Ignore Home Assistant secrets
+secrets.yaml
+# Ignore backup files
+*.bak
+*.swp
