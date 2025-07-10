@@ -1,31 +1,37 @@
 # Luau Themed Lighting Automation
 
-This blueprint creates a Luau party atmosphere by slowly cycling multiple RGB lights through tropical colors. It is designed to be triggered from a dashboard button or any event in Home Assistant.
+This Home Assistant blueprint creates a Luau party atmosphere by cycling multiple RGB lights through a vibrant, customizable palette of tropical colors. It supports advanced per-light color cycling, randomization, and is designed for easy triggering and stopping from the dashboard or automations.
 
 ## Features
 
 - Select multiple RGB lights for the effect
-- Customizable color change delay and number of cycles
-- Easy to trigger from a dashboard button
-- Luau-inspired color palette
+- Advanced color cycling: each light gets a random color from the palette, always different from its current color
+- Customizable Luau-inspired color palette (edit in the blueprint)
+- Adjustable delay between lights and between cycles
+- Set the number of cycles (repeat count)
+- Adjustable transition time for smooth color changes
+- Robust error handling (e.g., empty light list or palette)
+- Easy to start and stop from dashboard buttons or automations
+- Well-documented for both users and contributors
+
+## How It Works
+
+- The automation triggers a script that cycles each selected RGB light through the chosen palette.
+- Each light is assigned a random color (never the same as its current color) on each cycle.
+- Delays between lights and cycles create a dynamic, party-like effect.
+- The script can be stopped at any time from the dashboard.
 
 ## Setup Instructions
 
 1. **Import the Blueprint**
-   - Copy the YAML from `luau_lighting.yaml` and import it as a blueprint in Home Assistant.
+   - Copy the YAML from `luau_lighting_automation.yaml` and import it as a blueprint in Home Assistant.
 2. **Create an Automation**
    - Use the blueprint to create an automation, selecting your RGB lights and customizing options as desired.
-3. **Add a Dashboard Button**
-   - Add a new button card to your dashboard.
-   - Set the button action to **Call Service**.
-   - Service: `event.fire`
-   - Service Data:
-     ```yaml
-     event_type: luau_lighting_start
-     ```
-   - (Optional) Set an icon and label for your Luau button.
+3. **Add Dashboard Buttons**
+   - **Start Button:** Add a button card to your dashboard to start the effect.
+   - **Stop Button:** Add a button card to stop the effect (calls the script's `turn_off` service).
 
-## Example Button YAML (Manual Card)
+### Example Start Button YAML (Manual Card)
 
 ```yaml
 type: button
@@ -38,11 +44,44 @@ tap_action:
     event_type: luau_lighting_start
 ```
 
-## Can this be automated?
+### Example Stop Button YAML (Manual Card)
 
-You can trigger the event from any automation, script, or dashboard element. For example, you could trigger it at sunset or when a party mode is activated by firing the `luau_lighting_start` event.
+```yaml
+type: button
+name: Stop Luau Lighting
+icon: mdi:stop-circle
+tap_action:
+  action: call-service
+  service: script.turn_off
+  target:
+    entity_id: script.luau_lighting_script
+```
 
-## Notes
+## Customization
 
-- The automation will cycle through the color palette for the selected number of cycles.
-- You can edit the color palette in the blueprint if you want to customize the effect.
+- **Color Palette:** Edit the palette in the blueprint YAML to match your preferred Luau colors.
+- **Delays & Transition:** Adjust the delay between lights, delay between cycles, and transition time for different effects.
+- **Repeat Count:** Set how many times the palette cycles (or use a high number for continuous effect).
+
+## Usage Notes
+
+- The automation and script are designed to work together. The automation triggers the script, which handles the color cycling logic.
+- You can trigger the automation from any event, schedule, or dashboard button.
+- The script can be stopped at any time using the stop button or by calling `script.turn_off`.
+- All logic is robust against empty lists and invalid input.
+
+## For Contributors
+
+- See `docs/CONTRIBUTING.md` for contribution guidelines.
+- All blueprints are documented and commented for clarity.
+- Please keep user and contributor documentation up to date with any changes.
+
+## Related Files
+
+- `blueprints/automation/luau/luau_lighting_automation.yaml` – The automation blueprint
+- `blueprints/script/luau/luau_lighting_script.yaml` – The script blueprint (core color cycling logic)
+- `docs/USAGE.md` – Detailed usage and integration instructions
+
+---
+
+Enjoy your Luau party lighting! For questions or suggestions, see the main project README or open an issue on GitHub.

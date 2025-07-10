@@ -25,23 +25,6 @@ fields:
         min: 0
         max: 180
         unit_of_measurement: seconds
-  repeat_count:
-    name: Number of Color Cycles
-    description: How many times to cycle through the color palette.
-    default: 30
-    selector:
-      number:
-        min: 1
-        max: 100
-  transition_time:
-    name: Color Transition Time
-    description: Time (in seconds) for each color transition.
-    default: 5
-    selector:
-      number:
-        min: 0
-        max: 30
-        unit_of_measurement: seconds
   light_delay:
     name: Delay Between Lights
     description: Time (in seconds) to wait between changing each light.
@@ -51,6 +34,23 @@ fields:
         min: 0
         max: 10
         unit_of_measurement: seconds
+  transition_time:
+    name: Color Transition Time
+    description: Time (in seconds) for each color transition.
+    default: 5
+    selector:
+      number:
+        min: 0
+        max: 30
+        unit_of_measurement: seconds
+  repeat_count:
+    name: Number of Color Cycles
+    description: How many times to cycle through the color palette.
+    default: 30
+    selector:
+      number:
+        min: 1
+        max: 100
 sequence:
   - choose:
       - conditions: "{{ lights | length == 0 }}"
