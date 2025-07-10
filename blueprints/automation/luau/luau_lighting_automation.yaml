@@ -45,6 +45,15 @@ blueprint:
       default: "luau_lighting_start"
       selector:
         text:
+    light_delay:
+      name: Delay Between Lights
+      description: Time (in seconds) to wait between changing each light.
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 10
+          unit_of_measurement: seconds
   source_url: https://github.com/mirkop/hass-blueprints
 trigger:
   - platform: event
@@ -58,6 +67,7 @@ action:
       cycle_delay: !input cycle_delay
       repeat_count: !input repeat_count
       transition_time: !input transition_time
+      light_delay: !input light_delay
 mode: single
 
 # Usage:

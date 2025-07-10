@@ -42,6 +42,15 @@ fields:
         min: 3
         max: 30
         unit_of_measurement: seconds
+  light_delay:
+    name: Delay Between Lights
+    description: Time (in seconds) to wait between changing each light.
+    default: 1
+    selector:
+      number:
+        min: 0
+        max: 10
+        unit_of_measurement: seconds
 sequence:
   - choose:
       - conditions: "{{ lights | length == 0 }}"
@@ -85,6 +94,6 @@ sequence:
                               brightness: 255
                               transition: "{{ transition_time }}"
                   - delay:
-                      seconds: "1"
+                      seconds: "{{ light_delay }}"
             - delay:
                 seconds: "{{ cycle_delay }}"
