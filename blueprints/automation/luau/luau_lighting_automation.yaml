@@ -1,0 +1,66 @@
+# Luau Themed Lighting Automation Blueprint (Script Trigger)
+blueprint:
+  name: Luau Themed Lighting (Script Trigger)
+  description: >
+    Automation blueprint to trigger the advanced Luau lighting script, which cycles each selected RGB light through a unique color from the Luau palette.
+    Trigger this automation from a button, event, or schedule.
+  domain: automation
+  input:
+    target_lights:
+      name: RGB Lights
+      description: Select one or more RGB lights to use for the Luau effect.
+      selector:
+        entity:
+          domain: light
+          multiple: true
+    cycle_delay:
+      name: Color Change Delay
+      description: Time (in seconds) between color changes.
+      default: 15
+      selector:
+        number:
+          min: 3
+          max: 180
+          unit_of_measurement: seconds
+    repeat_count:
+      name: Number of Color Cycles
+      description: How many times to cycle through the color palette.
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 100
+    transition_time:
+      name: Color Transition Time
+      description: Time (in seconds) for each color transition.
+      default: 5
+      selector:
+        number:
+          min: 3
+          max: 30
+          unit_of_measurement: seconds
+    trigger_event:
+      name: Trigger Event
+      description: Event type to trigger the Luau lighting (e.g., luau_lighting_start). Leave blank to use manual or time triggers.
+      default: ""
+      selector:
+        text:
+  source_url: https://github.com/mirkop/hass-blueprints
+trigger:
+  - platform: event
+    event_type: !input trigger_event
+    # If trigger_event is blank, this trigger is ignored. You can add manual or time triggers after importing.
+condition: []
+action:
+  - service: script.luau_themed_lighting_script
+    data:
+      lights: !input target_lights
+      cycle_delay: !input cycle_delay
+      repeat_count: !input repeat_count
+      transition_time: !input transition_time
+mode: single
+
+# Usage:
+# - Import this blueprint and create an automation.
+# - Select your RGB lights and timing options.
+# - Set a trigger event, or add your own triggers after importing.
