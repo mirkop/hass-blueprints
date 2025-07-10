@@ -10,9 +10,9 @@ blueprint:
       name: RGB Lights
       description: Select one or more RGB lights to use for the Luau effect.
       selector:
-        entity:
-          domain: light
-          multiple: true
+        target:
+          entity:
+            domain: light
     cycle_delay:
       name: Color Change Delay
       description: Time (in seconds) between color changes.
@@ -42,7 +42,7 @@ blueprint:
     trigger_event:
       name: Trigger Event
       description: Event type to trigger the Luau lighting (e.g., luau_lighting_start). Leave blank to use manual or time triggers.
-      default: ""
+      default: "luau_lighting_script_start"
       selector:
         text:
   source_url: https://github.com/mirkop/hass-blueprints
