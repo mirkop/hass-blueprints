@@ -23,7 +23,7 @@ fields:
     selector:
       number:
         min: 1
-        max: 240
+        max: 480
         unit_of_measurement: minutes
   cycle_delay:
     name: Color Change Delay
@@ -76,12 +76,11 @@ sequence:
             - [153, 51, 255]   # Orchid Purple
             - [255, 204, 229]  # Plumeria Pink
           num_lights: "{{ lights | length }}"
-          total_runtime_seconds: "{{ runtime_minutes * 60 }}"
-          time_per_cycle: "{{ cycle_delay + (light_delay * num_lights) }}"
           repeat_count: >
-            {% set t = cycle_delay + (light_delay * num_lights) %}
-            {% set total = runtime_minutes * 60 %}
-            {{ (total // t) if t > 0 else 1 }}
+            {% set total_runtime_seconds = runtime_minutes * 60 %}
+            {% set time_per_cycle = cycle_delay + (light_delay * num_lights) %}
+            {% set safe_time_per_cycle = time_per_cycle if time_per_cycle > 0 else 1 %}
+            {{ (total_runtime_seconds // safe_time_per_cycle) }}
       - repeat:
           count: "{{ repeat_count }}"
           sequence:
