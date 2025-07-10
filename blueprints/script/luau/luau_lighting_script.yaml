@@ -16,15 +16,6 @@ fields:
       entity:
         domain: light
         multiple: true
-  runtime_minutes:
-    name: Total Runtime (Minutes)
-    description: How many minutes the effect should run for.
-    default: 15
-    selector:
-      number:
-        min: 1
-        max: 480
-        unit_of_measurement: minutes
   cycle_delay:
     name: Color Change Delay
     description: Time (in seconds) between color changes.
@@ -52,6 +43,15 @@ fields:
         min: 0
         max: 30
         unit_of_measurement: seconds
+  runtime_minutes:
+    name: Total Runtime (Minutes)
+    description: How many minutes the effect should run for.
+    default: 15
+    selector:
+      number:
+        min: 1
+        max: 480
+        unit_of_measurement: minutes
 sequence:
   - choose:
       - conditions: "{{ lights | length == 0 }}"
