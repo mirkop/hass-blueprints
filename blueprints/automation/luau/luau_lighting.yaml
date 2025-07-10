@@ -12,7 +12,6 @@ blueprint:
         target:
           entity:
             domain: light
-            device_class: null
     cycle_delay:
       name: Color Change Delay
       description: Time (in seconds) between color changes.
