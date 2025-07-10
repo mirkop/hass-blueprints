@@ -28,6 +28,22 @@ data:
   transition_time: 5
 ```
 
+## Dashboard Button to Stop the Script
+
+Add this button to your dashboard to stop the Luau lighting script at any time:
+
+```yaml
+type: button
+name: Stop Luau Lighting
+icon: mdi:stop-circle
+entity: script.luau_themed_lighting_script
+tap_action:
+  action: call-service
+  service: script.turn_off
+  target:
+    entity_id: script.luau_themed_lighting_script
+```
+
 ## Notes
 
 - The color palette can be customized in the script variables.
